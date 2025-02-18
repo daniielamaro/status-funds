@@ -1,0 +1,177 @@
+ion-content{
+    --ion-background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: #333;
+}
+
+.row{
+    margin: 0;
+}
+
+.titulo-page{
+    font-size: 25px;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+}
+
+.next-area{
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-area{
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.item-area{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 8px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-code{
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.item-name{
+    margin-right: 20px;
+    color: #777;
+}
+
+.item-normal{
+    color: #333;
+}
+
+.item-sell{
+    color: #d5250a;
+}
+
+.item-buy{
+    color: #0baa40;
+}
+
+.buttom-area{
+    display: flex;
+    justify-content: space-between;
+}
+
+.button{
+    height: 40px;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.button.create{
+    background-color: #6c4ddf;
+}
+
+.button.create-disabled{
+    background-color: #6d4ddf2e;
+}
+
+.button.delete-outline{
+    color: #d5250a;
+}
+
+.button.delete{
+    background-color: #d5250a;
+}
+
+.button.confirm{
+    background-color: #0baa40;
+}
+
+:host ::ng-deep .valor-aporte input[type=number]:not(.browser-default){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+    font-size: 30px;
+    color: #6c4ddf;
+    height: 100%;
+}
+
+:host ::ng-deep .valor-aporte input[type=number]:not(.browser-default):focus:not([readonly]){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+    height: 100%;
+}
+
+.percent-symbol{
+    margin-right: 10px;
+    color: #333;
+    font-size: 18px;
+}
+
+.percent-asset{
+    width: 40px;
+    min-width: 40px;
+    min-height: 0;
+    height: 30px;
+}
+
+:host ::ng-deep .percent-asset input[type=number]:not(.browser-default){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+    font-size: 15px;
+    color: #6c4ddf;
+    margin: 0;
+}
+
+:host ::ng-deep .percent-asset label{
+    padding: 5px;
+}
+
+:host ::ng-deep .percent-asset input[type=number]:not(.browser-default):focus:not([readonly]){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+}
+
+.valor-aporte{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.distrbuicao-carteira-titulo{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.distrbuicao-carteira-subtitulo{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #940000;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 10px;
+}

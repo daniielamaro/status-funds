@@ -1,0 +1,74 @@
+<ion-content [fullscreen]="true">
+
+    <div style="margin-bottom: 30px;" class="row">
+        <div class="col s2"></div>
+        <div class="col s8 titulo-page">
+            Adicionar Ativo
+        </div>
+        <div class="col s2"></div>
+    </div>
+
+    <div *ngIf="step === 1">
+        <div class="row">
+            <div class="col s12 question">
+                Informe o código do ativo
+            </div>
+        </div>
+       <div class="row">
+            <div class="col s12">
+                <ion-input class="input-cotas" (keyup)="changeCodeAtivo()" [(ngModel)]="asset.code" placeholder="ativo"></ion-input>
+            </div>
+       </div>
+
+       <div class="row">
+            <div class="col s12">
+                <div (click)="step = 2" [ngClass]="{'save-button-disabled': !canContinue()}" class="save-button">
+                    Continuar
+                </div>
+            </div>
+       </div>
+
+       <div *ngIf="searchAssets.length > 0" class="row">
+            <div class="col s12 results-search-title">
+                Resultados:
+            </div>
+       </div>
+
+       <div *ngFor="let asset of searchAssets" (click)="selectSearchAsset(asset)" class="row">
+            <div class="col s12 result-search">
+                <ion-icon name="search"></ion-icon>
+                <strong>{{asset.code}}</strong>
+                <span class="truncate">{{asset.name}}</span>
+            </div>
+       </div>
+    </div>
+
+    <div *ngIf="step === 2">
+        <div *ngIf="asset !== undefined" class="row">
+            <div class="col s12 question">
+                Quantas cotas de <strong>{{asset.code}}</strong> você têm?
+            </div>
+       </div>
+       <div *ngIf="asset !== undefined" class="row">
+            <div class="col s12">
+                <ion-input class="input-cotas" type="number" [(ngModel)]="asset.amount" placeholder="cotas"></ion-input>
+            </div>
+       </div>
+
+       <div *ngIf="asset !== undefined" class="row">
+            <div class="col s12">
+                <div (click)="saveAsset()" [ngClass]="{'save-button-disabled': !canSave()}" class="save-button">
+                    Salvar
+                </div>
+            </div>
+       </div>
+       <div *ngIf="asset !== undefined" style="margin-top: 10px;" class="row">
+        <div class="col s12">
+            <div (click)="step = 1" class="save-button-outline">
+                Voltar
+            </div>
+        </div>
+   </div>
+    </div>
+
+</ion-content>

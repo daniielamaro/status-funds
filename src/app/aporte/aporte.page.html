@@ -1,0 +1,68 @@
+<ion-content [fullscreen]="true">
+  <div class="row">
+    <div class="col s12 titulo-page">
+      Aporte
+    </div>
+  </div>
+
+  <div *ngIf="!criarNovoAporte">
+    <div class="buttom-area">
+      <div *ngIf="nextSell.length == 0 && nextBuy.length == 0" (click)="criarNovoAporte = true" class="button create">
+        Criar um novo aporte
+      </div>
+      <div *ngIf="nextSell.length > 0 || nextBuy.length > 0" (click)="cancelarAporte()" class="button delete">
+        Cancelar aporte
+      </div>
+      <div *ngIf="nextSell.length > 0 || nextBuy.length > 0" (click)="confirmarAporte()" class="button confirm">
+        Confirmar aporte
+      </div>
+    </div>
+    
+    <div *ngIf="nextSell.length > 0" class="next-area">
+      <div class="title-area">Proxima Venda</div>
+      <div *ngFor="let asset of nextSell" class="item-area item-sell">
+        <div class="item-code">{{asset.code}}</div>
+        <div>{{asset.amount + (asset.amount > 1 ? ' cotas' : ' cota')}}</div>
+      </div>
+    </div>
+  
+    <div *ngIf="nextBuy.length > 0" class="next-area">
+      <div class="title-area">Proxima Compra</div>
+      <div *ngFor="let asset of nextBuy" class="item-area item-buy">
+        <div class="item-code">{{asset.code}}</div>
+        <div>{{asset.amount + (asset.amount > 1 ? ' cotas' : ' cota')}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="criarNovoAporte">
+    <div *ngIf="!canSaveConfiguracao()" class="distrbuicao-carteira-subtitulo">A soma da distribuição dos ativos precisa ser de 100% antes que faça qualquer aporte</div>
+    <div class="buttom-area">
+      <div (click)="cancelarConfiguracaoAporte()" class="button delete">
+        Cancelar
+      </div>
+      <div (click)="salvarConfiguracaoAporte()" [ngClass]="{'create-disabled': !canSaveConfiguracao()}" class="button create">
+        Salvar
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12">
+          <ion-input class="valor-aporte" placeholder="Valor de Aporte" type="number" [(ngModel)]="valorAporte"></ion-input>
+      </div>
+    </div>
+
+    
+
+    <div class="distrbuicao-carteira-titulo">Distribuição da Carteira por ativo</div>
+
+    <div *ngFor="let asset of getAssets()" style="justify-content: flex-start; align-items: center;" class="item-area item-normal">
+      <ion-input class="percent-asset" fill="outline" type="number" [(ngModel)]="asset.percentWallet"></ion-input>
+      <span class="percent-symbol">%</span>
+      <div class="item-code">{{asset.code}}</div>
+      <div class="item-name truncate">{{asset.name}}</div>
+    </div>
+
+  </div>
+
+</ion-content>

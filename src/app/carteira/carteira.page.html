@@ -1,0 +1,28 @@
+<ion-content [fullscreen]="true">
+    <div class="titulo-page">
+        <div>Carteira</div>
+        <div class="add-buttom-area">
+            <a routerLink="/tabs/adicionar-fi" class="add-buttom">
+                <ion-icon aria-hidden="true" name="add"></ion-icon>
+            </a>
+        </div>
+    </div>
+
+    <a *ngFor="let asset of getAssets()" [routerLink]="'/tabs/edit-asset/' + asset.code" class="row">
+        <div class="col s12">
+            <div class="asset-area">
+                <div class="asset-details">
+                    <div class="code-asset">{{ asset.code }}</div>
+                    <div class="truncate name-asset">{{ asset.name }}</div>
+                </div>
+                <div class="asset-amount">
+                    {{ asset.amount + (asset.amount > 1 ? ' cotas' : ' cota') }}
+                </div>
+                <div class="asset-icon">
+                    <ion-icon name="chevron-forward"></ion-icon>
+                </div>
+            </div>
+        </div>
+    </a>
+    
+</ion-content>

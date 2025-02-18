@@ -1,0 +1,7 @@
+{
+  "name": "Status Funds",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

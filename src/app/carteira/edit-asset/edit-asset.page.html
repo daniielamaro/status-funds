@@ -1,0 +1,37 @@
+<ion-content [fullscreen]="true">
+
+    <div style="margin-bottom: 30px;" class="row">
+        <div class="col s2"></div>
+        <div class="col s8 titulo-page">
+            Editar Ativo
+        </div>
+        <div class="col s2"></div>
+    </div>
+
+   <div *ngIf="asset != undefined" class="row">
+        <div class="col s12 question">
+            Quantas cotas de <strong>{{asset.code}}</strong> você têm?
+        </div>
+   </div>
+   <div *ngIf="asset != undefined" class="row">
+        <div class="col s12">
+            <ion-input class="input-cotas" type="number" [(ngModel)]="asset.amount" [size]="100" placeholder="cotas"></ion-input>
+        </div>
+   </div>
+
+   <div *ngIf="asset != undefined" class="row">
+        <div class="col s12">
+            <div (click)="saveAsset()" class="save-button">
+                Salvar
+            </div>
+        </div>
+   </div>
+   <div *ngIf="asset != undefined" class="row">
+    <div class="col s12">
+        <div (click)="deleteAsset()" class="delete-button">
+            Deletar ativo
+        </div>
+    </div>
+</div>
+    
+</ion-content>

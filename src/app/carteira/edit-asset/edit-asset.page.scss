@@ -1,0 +1,61 @@
+ion-content{
+    --ion-background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: #333;
+}
+
+.titulo-page{
+    font-size: 25px;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+}
+
+.question{
+    color: #333;
+    font-size: 18px;
+}
+
+:host ::ng-deep input[type=number]:not(.browser-default){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+    font-size: 50px;
+    color: #6c4ddf;
+}
+
+:host ::ng-deep input[type=number]:not(.browser-default):focus:not([readonly]){
+    border-bottom: 0px;
+    box-shadow: 0px 0px;
+}
+
+.input-cotas{
+    height: 100px;
+}
+
+.save-button{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: #6c4ddf;
+    color: #fff;
+    font-weight: bold;
+}
+
+.delete-button{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d40000;
+    font-weight: bold;
+}
