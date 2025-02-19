@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { IonApp, IonLoading, IonRouterOutlet } from '@ionic/angular/standalone';
 import { filter, firstValueFrom } from 'rxjs';
@@ -13,14 +13,14 @@ import { UserData } from 'src/shared/user-data';
   templateUrl: 'app.component.html',
   standalone: true,
   imports: [
-    IonApp, 
+    IonApp,
     IonRouterOutlet,
     IonLoading,
-    CommonModule, 
+    CommonModule,
     HttpClientModule
   ],
 })
-export class AppComponent extends UserData implements OnInit  {
+export class AppComponent extends UserData   {
 
   static isLoading: boolean = false;
   static assets: Asset[] = [];
@@ -36,10 +36,6 @@ export class AppComponent extends UserData implements OnInit  {
     ).subscribe(async () => {
         await this.loadData();
     });
-
-  }
-  
-  async ngOnInit() {
 
   }
 

@@ -1,5 +1,5 @@
 import { Component, EnvironmentInjector, OnInit, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonList, IonItem, IonIcon } from '@ionic/angular/standalone';
 import { UserData } from 'src/shared/user-data';
 import { cash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
@@ -14,23 +14,20 @@ import { FormsModule } from '@angular/forms';
   templateUrl: 'dividendos.page.html',
   styleUrls: ['dividendos.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonIcon, CommonModule, HttpClientModule, FormsModule]
+  imports: [IonContent, IonList, IonItem, IonIcon, CommonModule, HttpClientModule, FormsModule]
 })
-export class DividendosPage extends UserData implements OnInit {
+export class DividendosPage extends UserData {
 
   public environmentInjector = inject(EnvironmentInjector);
   seeByTotalValue: boolean = true;
 
   constructor(
-    public override appStorageService: AppStorageService, 
+    public override appStorageService: AppStorageService,
     public override http: HttpClient,
     public override router: Router
   ) {
     super(appStorageService, http, router);
     addIcons({ cash });
-  }
-
-  async ngOnInit() {
   }
 
 }

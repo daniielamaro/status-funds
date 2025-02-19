@@ -7,30 +7,28 @@
 
   <div *ngIf="!criarNovoAporte">
     <div class="buttom-area">
-      <div *ngIf="nextSell.length == 0 && nextBuy.length == 0" (click)="criarNovoAporte = true" class="button create">
+      <div *ngIf="nextBuy.length === 0" (click)="criarNovoAporte = true" class="button create">
         Criar um novo aporte
       </div>
-      <div *ngIf="nextSell.length > 0 || nextBuy.length > 0" (click)="cancelarAporte()" class="button delete">
+      <div *ngIf="nextBuy.length > 0" (click)="cancelarAporte()" class="button delete">
         Cancelar aporte
       </div>
-      <div *ngIf="nextSell.length > 0 || nextBuy.length > 0" (click)="confirmarAporte()" class="button confirm">
+      <div *ngIf="nextBuy.length > 0" (click)="confirmarAporte()" class="button confirm">
         Confirmar aporte
       </div>
     </div>
-    
-    <div *ngIf="nextSell.length > 0" class="next-area">
-      <div class="title-area">Proxima Venda</div>
-      <div *ngFor="let asset of nextSell" class="item-area item-sell">
-        <div class="item-code">{{asset.code}}</div>
-        <div>{{asset.amount + (asset.amount > 1 ? ' cotas' : ' cota')}}</div>
-      </div>
-    </div>
-  
+
     <div *ngIf="nextBuy.length > 0" class="next-area">
-      <div class="title-area">Proxima Compra</div>
+      <div class="title-area">
+        <span>Proxima Compra</span>
+        <div>{{getValueFormated(getTotalNextBuy)}}</div>
+      </div>
       <div *ngFor="let asset of nextBuy" class="item-area item-buy">
         <div class="item-code">{{asset.code}}</div>
-        <div>{{asset.amount + (asset.amount > 1 ? ' cotas' : ' cota')}}</div>
+        <div class="item-values">
+          <div>{{asset.amount + (asset.amount > 1 ? ' cotas' : ' cota')}}</div>
+          <div>{{getValueFormated(asset.amount * asset.lastQuotation)}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +50,7 @@
       </div>
     </div>
 
-    
+
 
     <div class="distrbuicao-carteira-titulo">Distribuição da Carteira por ativo</div>
 

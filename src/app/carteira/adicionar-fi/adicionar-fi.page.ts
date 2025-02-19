@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, EnvironmentInjector, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonInput } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, trash, pencil, chevronForward, search } from 'ionicons/icons';
 import { filter } from 'rxjs';
@@ -18,7 +18,7 @@ import { UserData } from 'src/shared/user-data';
   templateUrl: 'adicionar-fi.page.html',
   styleUrls: ['adicionar-fi.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, CommonModule, HttpClientModule, IonInput, FormsModule],
+  imports: [IonContent, IonIcon, CommonModule, HttpClientModule, IonInput, FormsModule],
 })
 export class AdicionarFiPage extends UserData implements OnInit  {
 

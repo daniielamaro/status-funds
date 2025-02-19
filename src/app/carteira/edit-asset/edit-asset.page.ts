@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, EnvironmentInjector, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonInput } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, trash, pencil, chevronForward } from 'ionicons/icons';
 import { AppComponent } from 'src/app/app.component';
@@ -16,7 +16,7 @@ import { UserData } from 'src/shared/user-data';
   templateUrl: 'edit-asset.page.html',
   styleUrls: ['edit-asset.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, CommonModule, HttpClientModule, IonInput, FormsModule],
+  imports: [IonContent, CommonModule, HttpClientModule, IonInput, FormsModule],
 })
 export class EditAssetPage extends UserData implements OnInit  {
 
@@ -24,8 +24,8 @@ export class EditAssetPage extends UserData implements OnInit  {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor(
-    public override appStorageService: AppStorageService, 
-    public override http: HttpClient, 
+    public override appStorageService: AppStorageService,
+    public override http: HttpClient,
     public override router: Router,
     private routeActiveted: ActivatedRoute
   ) {

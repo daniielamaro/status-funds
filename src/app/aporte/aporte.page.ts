@@ -1,5 +1,5 @@
 import { Component, EnvironmentInjector, OnInit, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonIcon, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonInput } from '@ionic/angular/standalone';
 import { UserData } from 'src/shared/user-data';
 import { cash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
@@ -16,21 +16,21 @@ import { AppComponent } from '../app.component';
   templateUrl: 'aporte.page.html',
   styleUrls: ['aporte.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonIcon, CommonModule, HttpClientModule, IonInput, FormsModule]
+  imports: [IonContent, CommonModule, HttpClientModule, IonInput, FormsModule]
 })
 export class AportePage extends UserData implements OnInit {
 
-  nextSell: Asset[] = [];
   nextBuy: Asset[] = [];
 
   criarNovoAporte: boolean = false;
 
   valorAporte: number | undefined;
+  lastTotalBalanceRemaining: number = 0;
 
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor(
-    public override appStorageService: AppStorageService, 
+    public override appStorageService: AppStorageService,
     public override http: HttpClient,
     public override router: Router
   ) {
@@ -41,35 +41,22 @@ export class AportePage extends UserData implements OnInit {
   async ngOnInit() {
     this.criarNovoAporte = false;
 
-    let nextSellRaw = await this.appStorageService.Get("nextSell");
     let nextBuyRaw = await this.appStorageService.Get("nextBuy");
-
-    if(nextSellRaw)
-      this.nextSell = JSON.parse(nextSellRaw);
 
     if(nextBuyRaw)
       this.nextBuy = JSON.parse(nextBuyRaw);
   }
 
+  get getTotalNextBuy(){
+    return this.nextBuy.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
+  }
+
   async cancelarAporte(){
-    await this.appStorageService.Set("nextSell", "[]");
     await this.appStorageService.Set("nextBuy", "[]");
-    this.nextSell = [];
     this.nextBuy = [];
   }
 
   async confirmarAporte(){
-    this.nextSell.forEach(assetForSell => {
-      let index = AppComponent.assets.findIndex(asset => asset.code == assetForSell.code);
-
-      if (index !== -1){
-        AppComponent.assets[index].amount -= assetForSell.amount;
-        
-        if(AppComponent.assets[index].amount <= 0)
-          AppComponent.assets.splice(index, 1);
-      }
-    });
-
     this.nextBuy.forEach(assetForBuy => {
       let index = AppComponent.assets.findIndex(asset => asset.code == assetForBuy.code);
 
@@ -85,144 +72,79 @@ export class AportePage extends UserData implements OnInit {
   cancelarConfiguracaoAporte(){
     this.criarNovoAporte = false;
     this.valorAporte = undefined;
+    this.lastTotalBalanceRemaining = 0;
   }
 
   async salvarConfiguracaoAporte(){
-    if(!this.canSaveConfiguracao()) return;
+    let listAssetsForBuy = await this.calculateAporte([]);
 
-    let totalBalanceAvaliable = (this.getTotalBalance() ?? 0) + (this.valorAporte ?? 0);
-
-    let listAssetsForBuyAndSell: any[] = [];
-
-    AppComponent.assets.forEach(asset => {
-
-      let amount = Math.round((totalBalanceAvaliable * ((asset.percentWallet ?? 0)/100)) / asset.lastQuotation);
-      let amountDif = amount - asset.amount;
-
-      listAssetsForBuyAndSell.push({
-        code: asset.code,
-        amount: amount,
-        amountDif: amountDif,
-        lastQuotation: asset.lastQuotation,
-        percentWallet: asset.percentWallet
-      });
+    this.nextBuy = [...listAssetsForBuy].filter(item => item.amount > 0).map(item => {
+      let asset = new Asset(item.code, "", item.amount);
+      asset.lastQuotation = item.lastQuotation;
+      return asset;
     });
 
-    let totalBalanceFuture = listAssetsForBuyAndSell.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
-
-    if(totalBalanceFuture > totalBalanceAvaliable){
-      let listforBuy: any[] = [];
-
-      listforBuy = [...listAssetsForBuyAndSell].map(item => {
-        return {...item};
-      });
-
-      listforBuy = listforBuy.filter(asset => asset.amountDif > 0).sort((a, b) => {
-        if (a.lastQuotation < b.lastQuotation) {
-            return -1;
-        }
-
-        if (a.lastQuotation > b.lastQuotation) {
-            return 1;
-        }
-        
-        return 0;
-      });
-
-      listAssetsForBuyAndSell.forEach(item => {
-        if(item.amountDif > 0){
-          item.amount -= item.amountDif;
-          item.amountDif = 0;
-        }
-      });
-
-      listforBuy.forEach(itemBuy => {
-        totalBalanceFuture = listAssetsForBuyAndSell.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
-        let cont = 0;
-
-        while(totalBalanceFuture < totalBalanceAvaliable && cont < itemBuy.amountDif){
-
-          totalBalanceFuture = listAssetsForBuyAndSell.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
-          
-          let index = listAssetsForBuyAndSell.findIndex(item => item.code == itemBuy.code);
-
-          if(index !== -1){
-            let listAssetsForBuyAndSellBackup = [...listAssetsForBuyAndSell].map(item => {
-              return {...item};
-            });
-            listAssetsForBuyAndSell[index].amount++;
-            listAssetsForBuyAndSell[index].amountDif++;
-
-            totalBalanceFuture = listAssetsForBuyAndSell.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
-
-            if(totalBalanceFuture > totalBalanceAvaliable)
-              listAssetsForBuyAndSell = [...listAssetsForBuyAndSellBackup].map(item => {
-                return {...item};
-              });
-          }
-
-          cont++;
-        }
-
-      });
-    }
-
-    let listTemp = listAssetsForBuyAndSell.filter(item => (item.percentWallet ?? 0) > 0).sort((a, b) => {
-      if (a.lastQuotation < b.lastQuotation) {
-          return -1;
-      }
-
-      if (a.lastQuotation > b.lastQuotation) {
-          return 1;
-      }
-      
-      return 0;
-    });
-
-    let contBreak = 0;
-
-    do{
-
-      for(let i = 0; i < listTemp.length; i++){
-        
-        let index = listAssetsForBuyAndSell.findIndex(item => item.code == listTemp[i].code);
-
-        if(index !== -1){
-          let listAssetsForBuyAndSellBackup = [...listAssetsForBuyAndSell].map(item => {
-            return {...item};
-          });
-          listAssetsForBuyAndSell[index].amount++;
-          listAssetsForBuyAndSell[index].amountDif++;
-
-          totalBalanceFuture = listAssetsForBuyAndSell.reduce((total, asset) => total + asset.amount * asset.lastQuotation, 0);
-
-          if(totalBalanceFuture > totalBalanceAvaliable){
-            listAssetsForBuyAndSell = [...listAssetsForBuyAndSellBackup].map(item => {
-              return {...item};
-            });
-            contBreak++;
-            break;
-          }
-            
-        }
-        
-      }
-      
-    }while(contBreak !== listTemp.length);
-
-    this.nextSell = [...listAssetsForBuyAndSell].filter(item => item.amountDif < 0).map(item => {
-      return new Asset(item.code, "", item.amountDif * -1);
-    });
-
-    this.nextBuy = [...listAssetsForBuyAndSell].filter(item => item.amountDif > 0).map(item => {
-      return new Asset(item.code, "", item.amountDif);
-    });
-
-    await this.appStorageService.Set("nextSell", JSON.stringify(this.nextSell));
     await this.appStorageService.Set("nextBuy", JSON.stringify(this.nextBuy));
     await this.appStorageService.Set("assets", JSON.stringify(AppComponent.assets));
 
     this.cancelarConfiguracaoAporte();
+  }
+
+  async calculateAporte(listAssetsForBuy: any[]){
+    let valorAporte = (this.valorAporte ?? 0);
+
+    if(valorAporte ==  this.lastTotalBalanceRemaining || valorAporte <= 0) return listAssetsForBuy;
+    if(!this.canSaveConfiguracao()) return listAssetsForBuy;
+
+    this.lastTotalBalanceRemaining = valorAporte;
+
+    let totalBalanceAvaliable = (this.getTotalBalance() ?? 0) + (this.valorAporte ?? 0);
+
+    let totalValueBill = 0;
+
+    AppComponent.assets.forEach(asset => {
+      let amountNeeded = Math.round((totalBalanceAvaliable * ((asset.percentWallet ?? 0)/100)) / asset.lastQuotation);
+      let valueByPercent = Math.round(valorAporte * (asset.percentWallet ?? 0)/100);
+      let amountICanBuy = Math.floor(valueByPercent / asset.lastQuotation);
+
+      if(asset.amount < amountNeeded && amountICanBuy > 0){
+        let indexItem = listAssetsForBuy.findIndex(x => x.code == asset.code);
+
+        if(indexItem > -1){
+          listAssetsForBuy[indexItem].amount += amountICanBuy;
+        }else{
+          listAssetsForBuy.push({
+            code: asset.code,
+            amount: amountICanBuy,
+            lastQuotation: asset.lastQuotation,
+            percentWallet: asset.percentWallet
+          });
+        }
+
+        totalValueBill += amountICanBuy*asset.lastQuotation;
+      }
+    });
+
+    let totalBalanceRemaining = valorAporte - totalValueBill;
+
+    AppComponent.assets.forEach(asset => {
+
+      if(asset.lastQuotation <= totalBalanceRemaining){
+        let indexItem = listAssetsForBuy.findIndex(x => x.code == asset.code);
+
+        if(indexItem > -1){
+          listAssetsForBuy[indexItem].amount++;
+          totalBalanceRemaining -= asset.lastQuotation;
+        }
+      }
+    });
+
+    if(totalBalanceRemaining != 0){
+      this.valorAporte = totalBalanceRemaining;
+      listAssetsForBuy = await this.calculateAporte(listAssetsForBuy);
+    }
+
+    return listAssetsForBuy;
   }
 
   canSaveConfiguracao(){

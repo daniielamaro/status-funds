@@ -31,19 +31,19 @@
   <ion-list lines="full">
 
     <ion-item *ngFor="let asset of getAssets()">
-      <div [ngClass]="{'icon-dividends-received': getRemainingDaysForPayment(asset) <= 0 && getRemainingDaysForPayment(asset) != -999, 'icon-dividends-receivable': getRemainingDaysForPayment(asset) > 0}" class="dividend-area">
+      <div [ngClass]="{'icon-dividends-received': getRemainingDaysForPayment(asset) <= 0 && getRemainingDaysForPayment(asset) !== -999, 'icon-dividends-receivable': getRemainingDaysForPayment(asset) > 0}" class="dividend-area">
         <div class="icon-dividends">
           <ion-icon class="payment-color" aria-hidden="true" name="cash"></ion-icon>
         </div>
         <div class="dividends-details">
           <div class="dividends-name-value">
             <div>{{asset.code}}</div>
-            <div *ngIf="!seeByTotalValue">{{(getRemainingDaysForPayment(asset) == -999 ? '' : getValueFormated(asset.lastDividend))}}</div>
-            <div *ngIf="seeByTotalValue">{{(getRemainingDaysForPayment(asset) == -999 ? '' : getValueFormated(getPaymentTotal(asset)))}}</div>
+            <div *ngIf="!seeByTotalValue">{{(getRemainingDaysForPayment(asset) === -999 ? '' : getValueFormated(asset.lastDividend))}}</div>
+            <div *ngIf="seeByTotalValue">{{(getRemainingDaysForPayment(asset) === -999 ? '' : getValueFormated(getPaymentTotal(asset)))}}</div>
           </div>
           <div class="dividends-performance">
             <div>Rendimento: {{calculatePerformance(asset)}}</div>
-            <div class="payment-color">{{(getRemainingDaysForPayment(asset) == -999 ? 'Não Informado' : getRemainingDaysForPayment(asset) == 0 ? 'Hoje' : getRemainingDaysForPayment(asset) == 1 ? 'Amanhã' : getRemainingDaysForPayment(asset) < 0 ? 'Recebido' : 'Em '+ getRemainingDaysForPayment(asset) + ' dias')}}</div>
+            <div class="payment-color">{{(getRemainingDaysForPayment(asset) === -999 ? 'Não Informado' : getRemainingDaysForPayment(asset) === 0 ? 'Hoje' : getRemainingDaysForPayment(asset) === 1 ? 'Amanhã' : getRemainingDaysForPayment(asset) < 0 ? 'Recebido' : 'Em '+ getRemainingDaysForPayment(asset) + ' dias')}}</div>
           </div>
         </div>
       </div>
