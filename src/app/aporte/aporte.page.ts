@@ -127,15 +127,41 @@ export class AportePage extends UserData implements OnInit {
 
     let totalBalanceRemaining = valorAporte - totalValueBill;
 
-    AppComponent.assets.forEach(asset => {
+    let assetsSortedByPerformance = [...AppComponent.assets];
 
+    assetsSortedByPerformance = assetsSortedByPerformance.sort((a, b) => {
+      let perfA = Number(this.calculatePerformance(a).replace("%", ""));
+      let perfB = Number(this.calculatePerformance(b).replace("%", ""));
+
+      if (perfB < perfA) {
+          return -1;
+      }
+
+      if (perfB > perfA) {
+          return 1;
+      }
+
+      return 0;
+    });
+
+    console.log(assetsSortedByPerformance);
+
+    assetsSortedByPerformance.forEach(asset => {
       if(asset.lastQuotation <= totalBalanceRemaining){
         let indexItem = listAssetsForBuy.findIndex(x => x.code == asset.code);
 
         if(indexItem > -1){
           listAssetsForBuy[indexItem].amount++;
-          totalBalanceRemaining -= asset.lastQuotation;
+        }else{
+          listAssetsForBuy.push({
+            code: asset.code,
+            amount: 1,
+            lastQuotation: asset.lastQuotation,
+            percentWallet: asset.percentWallet
+          });
         }
+
+        totalBalanceRemaining -= asset.lastQuotation;
       }
     });
 
