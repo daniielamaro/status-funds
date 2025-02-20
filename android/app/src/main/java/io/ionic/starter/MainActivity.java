@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.danielamaro.statusfunds;
 
 import com.getcapacitor.BridgeActivity;
 
