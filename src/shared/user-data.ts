@@ -81,7 +81,7 @@ export class UserData {
 
         do{
           try{
-            const url = 'https://corsproxy.io/?' + 'https://statusinvest.com.br/home/mainsearchquery?q='+asset.code;
+            const url = 'https://corsproxy.io/?https://statusinvest.com.br/home/mainsearchquery?q='+asset.code;
 
             let respQuotationStatusInvest = (<any>(await firstValueFrom(this.http.get(url))));
 
@@ -105,7 +105,7 @@ export class UserData {
                 asset.paymentDate = "";
                 asset.lastDividend = 0;
 
-                const url = 'https://corsproxy.io/?' + 'https://statusinvest.com.br/fii/companytickerprovents?ticker='+asset.code;
+                const url = 'https://corsproxy.io/?https://statusinvest.com.br/fii/companytickerprovents?ticker='+asset.code;
 
                 let resp = (<any>(await firstValueFrom(this.http.get(url))));
 
@@ -162,7 +162,7 @@ export class UserData {
 
         do{
           try{
-            const url = 'https://corsproxy.io/?' + 'https://statusinvest.com.br/home/mainsearchquery?q='+asset.code;
+            const url = 'https://corsproxy.io/?https://statusinvest.com.br/home/mainsearchquery?q='+asset.code;
 
             let respQuotationStatusInvest = (<any>(await firstValueFrom(this.http.get(url))));
 
@@ -186,7 +186,7 @@ export class UserData {
                 asset.paymentDate = "";
                 asset.lastDividend = 0;
 
-                const url = 'https://corsproxy.io/?' + 'https://statusinvest.com.br/fii/companytickerprovents?ticker='+asset.code;
+                const url = 'https://corsproxy.io/?https://statusinvest.com.br/fii/companytickerprovents?ticker='+asset.code;
 
                 let resp = (<any>(await firstValueFrom(this.http.get(url))));
 

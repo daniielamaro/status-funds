@@ -92,9 +92,6 @@ export class AdicionarFiPage extends UserData implements OnInit  {
   }
 
   async changeCodeAtivo(){
-
-    console.log("Change 1");
-
     if(this.itsInTimeoutForSearch) return;
 
     this.itsInTimeoutForSearch = true;
@@ -102,7 +99,7 @@ export class AdicionarFiPage extends UserData implements OnInit  {
     await new Promise(resolve => setTimeout(resolve, 2000));
     AppComponent.isLoading = true;
 
-    const url = 'https://corsproxy.io/?' + 'https://statusinvest.com.br/home/mainsearchquery?q='+this.asset.code;
+    const url = 'https://corsproxy.io/?https://statusinvest.com.br/home/mainsearchquery?q='+this.asset.code;
 
     let searchTemp = (<any>(await firstValueFrom(this.http.get(url))));
 
@@ -114,9 +111,6 @@ export class AdicionarFiPage extends UserData implements OnInit  {
     });
 
     this.searchAssets = this.searchAssets.filter((searchAsset: any) => !AppComponent.assets.some(asset => asset.code == searchAsset.code));
-
-    console.log();
-    console.log(this.searchAssets);
 
     this.searchAssets = this.searchAssets.sort((a, b) => {
       const codeA = a.code.toLowerCase();
